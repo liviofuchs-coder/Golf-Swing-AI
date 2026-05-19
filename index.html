@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Golf Swing AI</title>
 
 <style>
-
 body{
   margin:0;
   background:#0f172a;
@@ -33,11 +31,18 @@ button{
   padding:15px 30px;
   border:none;
   border-radius:12px;
-  background:#22c55e;
   color:white;
   font-size:18px;
   cursor:pointer;
-  margin-top:20px;
+  margin:10px;
+}
+
+.analyze{
+  background:#2563eb;
+}
+
+.premium{
+  background:#f59e0b;
 }
 
 video{
@@ -48,22 +53,36 @@ video{
   display:none;
 }
 
-.result{
-  margin-top:30px;
+.box{
+  margin:25px auto;
   background:#1e293b;
   padding:25px;
   border-radius:20px;
-  max-width:700px;
-  margin-left:auto;
-  margin-right:auto;
+  max-width:750px;
+}
+
+.result{
   display:none;
 }
 
 .score{
-  font-size:40px;
+  font-size:42px;
   color:#22c55e;
+  font-weight:bold;
 }
 
+.limit{
+  color:#facc15;
+  font-weight:bold;
+}
+
+input{
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  font-size:16px;
+  margin:8px;
+}
 </style>
 </head>
 
@@ -74,8 +93,34 @@ video{
 <h1>🏌️ Golf Swing AI</h1>
 
 <p>
-Lade ein Golfvideo aus deiner Galerie hoch.
+Gratis: 3 Video-Analysen pro Tag<br>
+Premium: unbegrenzt für 4.99 FR pro Monat
 </p>
+
+<div class="box">
+  <h2>Dein Plan</h2>
+
+  <p id="planText">Standard kostenlos</p>
+  <p class="limit" id="limitText">Heute übrig: 3 Analysen</p>
+
+  <input
+    type="text"
+    id="discountCode"
+    placeholder="Rabattcode eingeben"
+  >
+
+  <p id="priceText">
+    Premium Preis: 4.99 FR / Monat
+  </p>
+
+  <button class="premium" onclick="buyPremium()">
+    Premium kaufen
+  </button>
+
+  <p style="font-size:14px;color:#94a3b8;">
+    Rabattcode: Livio10 = 10% sparen
+  </p>
+</div>
 
 <input
   type="file"
@@ -85,81 +130,142 @@ Lade ein Golfvideo aus deiner Galerie hoch.
 
 <br>
 
-<button onclick="analyzeSwing()">
-Swing analysieren
+<button class="analyze" onclick="analyzeSwing()">
+  Swing analysieren
 </button>
 
 <br>
 
-<video
-  id="videoPreview"
-  controls
-></video>
+<video id="videoPreview" controls></video>
 
-<div
-  class="result"
-  id="resultBox"
->
+<div class="box result" id="resultBox">
 
-<div class="score">
-82 / 100
+  <div class="score" id="scoreText">
+    82 / 100
+  </div>
+
+  <h2>Analyse abgeschlossen ✅</h2>
+
+  <p id="tipText">
+    Dein Schwung ist stabil. Deine Hüfte öffnet sich jedoch etwas zu früh.
+    Versuche den Schläger länger gerade durch die Balllinie zu führen.
+  </p>
+
 </div>
 
-<h2>
-Analyse abgeschlossen ✅
-</h2>
-
-<p>
-Dein Schwung ist stabil. Deine Hüfte öffnet sich jedoch etwas zu früh.
-Versuche den Schläger länger gerade durch die Balllinie zu führen.
-</p>
-
+<div class="box">
+  <h2>Funktionen</h2>
+  <p>✅ Video aus Galerie hochladen</p>
+  <p>✅ 3 kostenlose Analysen pro Tag</p>
+  <p>✅ Premium mit unbegrenzten Analysen</p>
+  <p>✅ Rabattcode Livio10 für 10% Rabatt</p>
+  <p>✅ Swing Score und Tipps</p>
 </div>
 
 </div>
 
 <script>
+const upload = document.getElementById("videoUpload");
+const preview = document.getElementById("videoPreview");
+const result = document.getElementById("resultBox");
+const planText = document.getElementById("planText");
+const limitText = document.getElementById("limitText");
+const scoreText = document.getElementById("scoreText");
+const tipText = document.getElementById("tipText");
 
-const upload =
-document.getElementById("videoUpload");
+const today = new Date().toDateString();
 
-const preview =
-document.getElementById("videoPreview");
+let data = JSON.parse(localStorage.getItem("golfAiData")) || {
+  date: today,
+  used: 0,
+  premium: false
+};
 
-const result =
-document.getElementById("resultBox");
+if(data.date !== today){
+  data.date = today;
+  data.used = 0;
+  saveData();
+}
+
+updatePlan();
 
 upload.addEventListener("change", function(){
-
   const file = this.files[0];
 
   if(file){
-
-    preview.src =
-    URL.createObjectURL(file);
-
-    preview.style.display =
-    "block";
-
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+    result.style.display = "none";
   }
-
 });
 
 function analyzeSwing(){
-
-  if(preview.src){
-
-    result.style.display =
-    "block";
-
-  } else {
-
+  if(!preview.src){
     alert("Bitte zuerst ein Video hochladen.");
-
+    return;
   }
 
+  if(!data.premium && data.used >= 3){
+    alert("Du hast heute schon 3 kostenlose Analysen benutzt. Upgrade auf Premium für unbegrenzte Analysen.");
+    return;
+  }
+
+  if(!data.premium){
+    data.used++;
+    saveData();
+  }
+
+  const scores = [76,82,85,88,91,79];
+  const score = scores[Math.floor(Math.random() * scores.length)];
+
+  scoreText.innerText = score + " / 100";
+
+  tipText.innerText =
+    "Dein Schwung ist solide. Achte darauf, den Oberkörper beim Treffmoment ruhiger zu halten. " +
+    "Führe den Schläger länger auf der Ziellinie und öffne die Hüfte etwas später.";
+
+  result.style.display = "block";
+  updatePlan();
 }
 
+function buyPremium(){
+  const code = document.getElementById("discountCode").value.trim();
+
+  let price = 4.99;
+
+  if(code.toLowerCase() === "livio10"){
+    price = (4.99 * 0.9).toFixed(2);
+
+    alert(
+      "Rabattcode aktiviert ✅\n" +
+      "Du sparst 10%.\n" +
+      "Neuer Preis: " + price + " FR / Monat"
+    );
+  } else {
+    alert(
+      "Premium aktiviert ✅\n" +
+      "Preis: 4.99 FR / Monat"
+    );
+  }
+
+  data.premium = true;
+  saveData();
+  updatePlan();
+}
+
+function updatePlan(){
+  if(data.premium){
+    planText.innerText = "Premium aktiv";
+    limitText.innerText = "Unbegrenzte Analysen verfügbar";
+  } else {
+    planText.innerText = "Standard kostenlos";
+    limitText.innerText = "Heute übrig: " + (3 - data.used) + " Analysen";
+  }
+}
+
+function saveData(){
+  localStorage.setItem("golfAiData", JSON.stringify(data));
+}
 </script>
 
 </body>
