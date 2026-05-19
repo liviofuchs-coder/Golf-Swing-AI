@@ -6,105 +6,26 @@
 <title>Golf Swing AI</title>
 
 <style>
-
-body{
-  margin:0;
-  background:#081225;
-  color:white;
-  font-family:Arial;
-  text-align:center;
-}
-
-.container{
-  padding:40px 20px;
-}
-
-h1{
-  font-size:65px;
-  margin-bottom:10px;
-}
-
-.subtitle{
-  font-size:28px;
-  color:#dbeafe;
-  margin-bottom:40px;
-}
-
-.box{
-  background:#1e293b;
-  padding:35px;
-  border-radius:25px;
-  max-width:900px;
-  margin:25px auto;
-}
-
-button{
-  border:none;
-  border-radius:14px;
-  padding:18px 35px;
-  font-size:20px;
-  color:white;
-  cursor:pointer;
-  margin-top:15px;
-}
-
-.uploadBtn{
-  background:#22c55e;
-  width:100%;
-  max-width:500px;
-  font-size:24px;
-  padding:22px;
-}
-
-.analyzeBtn{
-  background:#2563eb;
-  width:100%;
-  max-width:500px;
-  font-size:24px;
-  padding:22px;
-}
-
-.premiumBtn{
-  background:#f59e0b;
-}
-
-video{
-  width:95%;
-  max-width:850px;
-  border-radius:25px;
-  margin-top:30px;
-  display:none;
-}
-
-.result{
-  display:none;
-}
-
-.score{
-  font-size:55px;
-  color:#22c55e;
-  font-weight:bold;
-}
-
-input{
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  font-size:18px;
-  width:280px;
-}
-
-.limit{
-  color:#facc15;
-  font-size:28px;
-  font-weight:bold;
-}
-
-.small{
-  font-size:15px;
-  color:#94a3b8;
-}
-
+body{margin:0;background:#081225;color:white;font-family:Arial;text-align:center}
+.container{padding:40px 20px}
+h1{font-size:65px;margin-bottom:10px}
+.subtitle{font-size:28px;color:#dbeafe;margin-bottom:40px}
+.box{background:#1e293b;padding:35px;border-radius:25px;max-width:900px;margin:25px auto}
+button{border:none;border-radius:14px;padding:18px 35px;font-size:20px;color:white;cursor:pointer;margin-top:15px}
+.uploadBtn{background:#22c55e;width:100%;max-width:500px;font-size:24px;padding:22px}
+.analyzeBtn{background:#2563eb;width:100%;max-width:500px;font-size:24px;padding:22px}
+.premiumBtn{background:#f59e0b}
+video{width:95%;max-width:850px;border-radius:25px;margin-top:30px;display:none}
+.result{display:none}
+.score{font-size:55px;color:#22c55e;font-weight:bold}
+.bad{color:#f87171}
+.mid{color:#facc15}
+.good{color:#22c55e}
+input{padding:14px;border:none;border-radius:12px;font-size:18px;width:280px}
+.limit{color:#facc15;font-size:28px;font-weight:bold}
+.tipList{text-align:left;max-width:700px;margin:25px auto;font-size:20px;line-height:1.6}
+.tipList li{margin-bottom:12px}
+.stat{font-size:22px;color:#dbeafe}
 </style>
 </head>
 
@@ -119,97 +40,61 @@ Gratis: 3 Analysen pro Tag<br>
 Premium: unbegrenzt für 4.99 FR
 </div>
 
-<!-- VIDEO -->
 <div class="box">
-
 <h2>📹 Golf Video hochladen</h2>
 
-<input
-  type="file"
-  id="videoUpload"
-  accept="video/mp4,video/quicktime,video/*"
->
+<input type="file" id="videoUpload" accept="video/mp4,video/quicktime,video/*">
 
 <br>
 
-<button
-  class="uploadBtn"
-  onclick="document.getElementById('videoUpload').click()"
->
+<button class="uploadBtn" onclick="document.getElementById('videoUpload').click()">
 📁 Video aus Galerie auswählen
 </button>
 
 <br>
 
-<button
-  class="analyzeBtn"
-  onclick="analyzeSwing()"
->
+<button class="analyzeBtn" onclick="analyzeSwing()">
 🧠 Swing analysieren
 </button>
 
-<video
-  id="videoPreview"
-  controls
-></video>
-
+<video id="videoPreview" controls></video>
 </div>
 
-<!-- RESULT -->
-<div
-  class="box result"
-  id="resultBox"
->
+<div class="box result" id="resultBox">
 
-<div
-  class="score"
-  id="scoreText"
->
-82 / 100
-</div>
+<div class="score" id="scoreText">68 / 100</div>
 
-<h2>
-✅ Analyse abgeschlossen
-</h2>
+<h2>✅ Analyse abgeschlossen</h2>
 
-<p id="tipText">
-Dein Schwung ist stabil. Deine Hüfte öffnet sich jedoch etwas zu früh.
+<p class="stat" id="ballFlightText">
+Ballflug: leicht rechts
 </p>
 
+<p class="stat" id="ratingText">
+Bewertung: Verbesserungswürdig
+</p>
+
+<h2>Tipps zur Verbesserung</h2>
+
+<ul class="tipList" id="tipList"></ul>
+
 </div>
 
-<!-- PREMIUM -->
 <div class="box">
 
 <h2>⭐ Premium</h2>
 
-<p id="planText">
-Standard kostenlos
-</p>
+<p id="planText">Standard kostenlos</p>
 
-<p
-  class="limit"
-  id="limitText"
->
-Heute übrig: 3 Analysen
-</p>
+<p class="limit" id="limitText">Heute übrig: 3 Analysen</p>
 
-<input
-  type="text"
-  id="discountCode"
-  placeholder="Rabattcode"
->
+<input type="text" id="discountCode" placeholder="Rabattcode">
 
 <br>
 
-<p id="priceText">
-Premium Preis: 4.99 FR / Monat
-</p>
+<p id="priceText">Premium Preis: 4.99 FR / Monat</p>
 
-<button
-  class="premiumBtn"
-  onclick="buyPremium()"
->
+<button class="premiumBtn" onclick="buyPremium()">
 Premium kaufen
 </button>
 
@@ -218,193 +103,172 @@ Premium kaufen
 </div>
 
 <script>
+const upload = document.getElementById("videoUpload");
+const preview = document.getElementById("videoPreview");
+const result = document.getElementById("resultBox");
+const planText = document.getElementById("planText");
+const limitText = document.getElementById("limitText");
+const scoreText = document.getElementById("scoreText");
+const ballFlightText = document.getElementById("ballFlightText");
+const ratingText = document.getElementById("ratingText");
+const tipList = document.getElementById("tipList");
 
-const upload =
-document.getElementById("videoUpload");
+const today = new Date().toDateString();
 
-const preview =
-document.getElementById("videoPreview");
-
-const result =
-document.getElementById("resultBox");
-
-const planText =
-document.getElementById("planText");
-
-const limitText =
-document.getElementById("limitText");
-
-const scoreText =
-document.getElementById("scoreText");
-
-const tipText =
-document.getElementById("tipText");
-
-const today =
-new Date().toDateString();
-
-let data =
-JSON.parse(localStorage.getItem("golfAiData")) || {
-
+let data = JSON.parse(localStorage.getItem("golfAiData")) || {
   date: today,
   used: 0,
   premium: false
-
 };
 
 if(data.date !== today){
-
   data.date = today;
-
   data.used = 0;
-
   saveData();
-
 }
 
 updatePlan();
 
 upload.addEventListener("change", function(){
-
-  const file =
-  this.files[0];
+  const file = this.files[0];
 
   if(file){
-
-    preview.src =
-    URL.createObjectURL(file);
-
-    preview.style.display =
-    "block";
-
-    result.style.display =
-    "none";
-
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+    result.style.display = "none";
   }
-
 });
 
 function analyzeSwing(){
-
   if(!preview.src){
-
-    alert(
-      "Bitte zuerst ein Video hochladen."
-    );
-
+    alert("Bitte zuerst ein Video hochladen.");
     return;
-
   }
 
   if(!data.premium && data.used >= 3){
-
-    alert(
-      "Du hast heute bereits 3 kostenlose Analysen benutzt."
-    );
-
+    alert("Du hast heute bereits 3 kostenlose Analysen benutzt.");
     return;
-
   }
 
   if(!data.premium){
-
     data.used++;
-
     saveData();
-
   }
 
-  const scores =
-  [76,82,85,88,91,79];
+  const analyses = [
+    {
+      score: 54,
+      flight: "Ballflug: deutlich nach rechts",
+      rating: "Bewertung: Zu unkontrolliert",
+      tips: [
+        "Deine Schlagfläche wirkt im Treffmoment offen. Versuche die Hände stabiler durch den Ball zu führen.",
+        "Deine Hüfte öffnet sich vermutlich zu früh. Starte den Downswing kontrollierter.",
+        "Halte den Kopf länger ruhig über dem Ball.",
+        "Führe den Schläger länger gerade zur Ziellinie.",
+        "Trainiere langsamere Probeschwünge, bevor du mit voller Kraft schlägst."
+      ]
+    },
+    {
+      score: 61,
+      flight: "Ballflug: leichter Slice nach rechts",
+      rating: "Bewertung: Verbesserungswürdig",
+      tips: [
+        "Der Ballflug nach rechts deutet auf eine offene Schlagfläche hin.",
+        "Achte darauf, dass deine Schultern beim Treffmoment nicht zu früh öffnen.",
+        "Dein Schwungtempo sollte gleichmäßiger sein.",
+        "Versuche den Schläger flacher in den Ball zu führen.",
+        "Halte dein Finish länger stabil."
+      ]
+    },
+    {
+      score: 67,
+      flight: "Ballflug: leicht nach links",
+      rating: "Bewertung: Mittelmäßig",
+      tips: [
+        "Der Ball startet leicht links. Kontrolliere deine Ausrichtung vor dem Schlag.",
+        "Deine Hände könnten im Treffmoment zu aktiv sein.",
+        "Versuche den Griffdruck etwas zu reduzieren.",
+        "Achte auf eine ruhige Gewichtsverlagerung.",
+        "Der Durchschwung sollte länger und balancierter sein."
+      ]
+    },
+    {
+      score: 72,
+      flight: "Ballflug: relativ gerade mit leichter Kurve",
+      rating: "Bewertung: Solide, aber noch nicht konstant",
+      tips: [
+        "Dein Schwung ist brauchbar, aber die Konstanz fehlt noch.",
+        "Arbeite an einem ruhigeren Oberkörper im Treffmoment.",
+        "Führe den Schläger nach dem Ball länger auf der Ziellinie.",
+        "Achte darauf, nicht zu früh aufzurichten.",
+        "Trainiere 50%-Schwünge für mehr Kontrolle."
+      ]
+    },
+    {
+      score: 78,
+      flight: "Ballflug: überwiegend gerade",
+      rating: "Bewertung: Gut",
+      tips: [
+        "Dein Ballflug ist gut, aber du kannst noch mehr Kontrolle bekommen.",
+        "Halte dein Finish zwei Sekunden stabil.",
+        "Achte auf gleichmäßiges Tempo im Rückschwung.",
+        "Verbessere die Balance beim Durchschwung.",
+        "Versuche die Hüftrotation noch sauberer zu timen."
+      ]
+    }
+  ];
 
-  const score =
-  scores[Math.floor(Math.random() * scores.length)];
+  const analysis = analyses[Math.floor(Math.random() * analyses.length)];
 
-  scoreText.innerText =
-  score + " / 100";
+  scoreText.innerText = analysis.score + " / 100";
+  ballFlightText.innerText = analysis.flight;
+  ratingText.innerText = analysis.rating;
 
-  tipText.innerText =
-  "Dein Schwung ist stabil, aber deine Hüfte öffnet sich etwas zu früh. " +
-  "Versuche den Schläger länger gerade durch die Balllinie zu führen.";
+  scoreText.className = "score";
+  if(analysis.score < 65) scoreText.classList.add("bad");
+  else if(analysis.score < 75) scoreText.classList.add("mid");
+  else scoreText.classList.add("good");
 
-  result.style.display =
-  "block";
+  tipList.innerHTML = "";
+  analysis.tips.forEach(tip => {
+    const li = document.createElement("li");
+    li.innerText = tip;
+    tipList.appendChild(li);
+  });
 
+  result.style.display = "block";
   updatePlan();
-
 }
 
 function buyPremium(){
-
-  const code =
-  document.getElementById("discountCode")
-  .value
-  .trim();
-
+  const code = document.getElementById("discountCode").value.trim();
   let price = 4.99;
 
   if(code.toLowerCase() === "livio10"){
-
-    price =
-    (4.99 * 0.9).toFixed(2);
-
-    alert(
-      "Rabatt aktiviert ✅\n" +
-      "Neuer Preis: " +
-      price +
-      " FR"
-    );
-
+    price = (4.99 * 0.9).toFixed(2);
+    alert("Rabatt aktiviert ✅\nNeuer Preis: " + price + " FR");
   } else {
-
-    alert(
-      "Premium aktiviert ✅\n" +
-      "Preis: 4.99 FR"
-    );
-
+    alert("Premium aktiviert ✅\nPreis: 4.99 FR");
   }
 
   data.premium = true;
-
   saveData();
-
   updatePlan();
-
 }
 
 function updatePlan(){
-
   if(data.premium){
-
-    planText.innerText =
-    "Premium aktiv";
-
-    limitText.innerText =
-    "Unbegrenzte Analysen";
-
+    planText.innerText = "Premium aktiv";
+    limitText.innerText = "Unbegrenzte Analysen";
   } else {
-
-    planText.innerText =
-    "Standard kostenlos";
-
-    limitText.innerText =
-    "Heute übrig: " +
-    (3 - data.used) +
-    " Analysen";
-
+    planText.innerText = "Standard kostenlos";
+    limitText.innerText = "Heute übrig: " + (3 - data.used) + " Analysen";
   }
-
 }
 
 function saveData(){
-
-  localStorage.setItem(
-    "golfAiData",
-    JSON.stringify(data)
-  );
-
+  localStorage.setItem("golfAiData", JSON.stringify(data));
 }
-
 </script>
 
 </body>
