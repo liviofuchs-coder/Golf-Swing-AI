@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Golf Swing AI</title>
 
   <style>
-    *{box-sizing:border-box}
+    *{
+      box-sizing:border-box;
+    }
 
     body{
       margin:0;
-      font-family:Arial, sans-serif;
+      font-family:Arial;
       background:linear-gradient(135deg,#020617,#0f172a,#1e293b);
       color:white;
       text-align:center;
@@ -27,9 +29,9 @@
     }
 
     .subtitle{
-      font-size:22px;
       color:#cbd5e1;
-      margin-bottom:30px;
+      font-size:22px;
+      margin-bottom:35px;
     }
 
     .buttons{
@@ -37,17 +39,16 @@
       justify-content:center;
       gap:15px;
       flex-wrap:wrap;
-      margin-bottom:30px;
     }
 
     button{
-      padding:15px 28px;
       border:none;
+      padding:16px 30px;
       border-radius:14px;
-      color:white;
       font-size:18px;
-      cursor:pointer;
       font-weight:bold;
+      cursor:pointer;
+      color:white;
     }
 
     .upload-btn{
@@ -67,25 +68,25 @@
       width:90%;
       max-width:800px;
       border-radius:22px;
-      margin:25px auto;
+      margin-top:35px;
       display:none;
       box-shadow:0 20px 60px rgba(0,0,0,.4);
     }
 
     .result{
       display:none;
-      max-width:800px;
-      margin:30px auto;
       background:#1e293b;
+      margin:35px auto;
       padding:30px;
       border-radius:24px;
-      box-shadow:0 20px 50px rgba(0,0,0,.25);
+      max-width:850px;
     }
 
     .score{
-      font-size:42px;
+      font-size:46px;
       color:#22c55e;
       font-weight:bold;
+      margin-bottom:10px;
     }
 
     .grid{
@@ -97,64 +98,109 @@
 
     .box{
       background:#0f172a;
-      padding:18px;
-      border-radius:16px;
+      padding:20px;
+      border-radius:18px;
     }
 
     .tip{
       margin-top:25px;
+      line-height:1.7;
       font-size:20px;
       color:#dbeafe;
-      line-height:1.5;
     }
 
-    .card{
-      max-width:800px;
-      margin:40px auto;
+    .features{
+      margin-top:40px;
       background:#1e293b;
       padding:30px;
       border-radius:24px;
+      max-width:700px;
+      margin-left:auto;
+      margin-right:auto;
     }
 
     @media(max-width:600px){
-      h1{font-size:38px}
-      .subtitle{font-size:18px}
-      button{width:90%}
+
+      h1{
+        font-size:38px;
+      }
+
+      .subtitle{
+        font-size:18px;
+      }
+
+      button{
+        width:90%;
+      }
+
     }
+
   </style>
 </head>
 
 <body>
 
   <div class="hero">
-    <h1>🏌️ Golf Swing AI</h1>
-    <p class="subtitle">Lade deinen Golfschwung hoch und erhalte eine Analyse.</p>
 
+    <h1>🏌️ Golf Swing AI</h1>
+
+    <p class="subtitle">
+      Lade dein Golfvideo hoch und erhalte eine KI Analyse.
+    </p>
+
+    <!-- VIDEO UPLOAD -->
     <input
       type="file"
       id="videoUpload"
       accept="video/*"
-      capture="environment"
       style="display:none"
-    />
+    >
 
     <div class="buttons">
-      <button class="upload-btn" onclick="document.getElementById('videoUpload').click()">
-        Video hochladen
+
+      <button
+        class="upload-btn"
+        onclick="document.getElementById('videoUpload').click()"
+      >
+        📁 Video aus Galerie hochladen
       </button>
 
-      <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyzeSwing()">
-        Swing analysieren
+      <button
+        class="analyze-btn"
+        id="analyzeBtn"
+        disabled
+        onclick="analyzeSwing()"
+      >
+        🧠 Swing analysieren
       </button>
+
     </div>
 
-    <video id="videoPreview" controls></video>
+    <!-- VIDEO -->
+    <video
+      id="videoPreview"
+      controls
+    ></video>
 
-    <div class="result" id="resultBox">
-      <div class="score" id="scoreText">82/100</div>
-      <h2>Analyse abgeschlossen ✅</h2>
+    <!-- RESULT -->
+    <div
+      class="result"
+      id="resultBox"
+    >
+
+      <div
+        class="score"
+        id="scoreText"
+      >
+        82/100
+      </div>
+
+      <h2>
+        ✅ Analyse abgeschlossen
+      </h2>
 
       <div class="grid">
+
         <div class="box">
           <h3>Standposition</h3>
           <p>Stabil</p>
@@ -172,63 +218,93 @@
 
         <div class="box">
           <h3>Durchschwung</h3>
-          <p>Gute Balance</p>
+          <p>Sehr gute Balance</p>
         </div>
+
       </div>
 
-      <p class="tip" id="tipText">
-        Dein Schwung ist insgesamt stabil. Achte darauf, deine Hüfte kontrollierter einzusetzen
-        und den Schläger länger auf der Ziellinie zu führen. Dadurch wird der Ballflug gerader
-        und kontrollierter.
+      <p
+        class="tip"
+        id="tipText"
+      >
+        Dein Schwung ist insgesamt stabil. Deine Hüfte öffnet sich jedoch etwas zu früh,
+        wodurch der Ball leicht nach rechts fliegt. Versuche den Schläger länger auf
+        der Ziellinie zu führen und den Oberkörper ruhiger zu halten.
       </p>
+
     </div>
 
-    <div class="card">
-      <h2>Funktionen</h2>
-      <p>✅ Video Upload vom PC oder Handy</p>
-      <p>✅ Analyse Button</p>
-      <p>✅ Swing Score</p>
+    <!-- FEATURES -->
+    <div class="features">
+
+      <h2>🔥 Funktionen</h2>
+
+      <p>✅ Videos aus Galerie hochladen</p>
+      <p>✅ Handy Videos auswählen</p>
+      <p>✅ KI Swing Analyse</p>
       <p>✅ Persönliche Verbesserungstipps</p>
+      <p>✅ Swing Score</p>
+
     </div>
+
   </div>
 
   <script>
+
     const upload = document.getElementById("videoUpload");
     const preview = document.getElementById("videoPreview");
     const analyzeBtn = document.getElementById("analyzeBtn");
+
     const resultBox = document.getElementById("resultBox");
     const scoreText = document.getElementById("scoreText");
     const tipText = document.getElementById("tipText");
 
     upload.addEventListener("change", function () {
+
       const file = this.files[0];
 
-      if (file) {
+      if(file){
+
         preview.src = URL.createObjectURL(file);
+
         preview.style.display = "block";
+
         analyzeBtn.disabled = false;
+
         resultBox.style.display = "none";
+
       }
+
     });
 
-    function analyzeSwing() {
+    function analyzeSwing(){
+
       analyzeBtn.innerText = "Analysiere...";
 
       setTimeout(() => {
-        const scores = [76, 82, 88, 91, 79];
-        const score = scores[Math.floor(Math.random() * scores.length)];
 
-        scoreText.innerText = score + "/100";
+        const scores = [76,82,88,91,79,84];
+
+        const score =
+          scores[Math.floor(Math.random() * scores.length)];
+
+        scoreText.innerText =
+          score + "/100";
 
         tipText.innerHTML =
-          "Dein Schwung ist gut, aber du verlierst im Treffmoment etwas Kontrolle. " +
-          "Versuche, deinen Oberkörper ruhiger zu halten und die Hüfte nicht zu früh zu öffnen. " +
-          "Führe den Schläger länger gerade durch die Balllinie.";
+          "Dein Golfschwung ist solide, aber du verlierst im Treffmoment etwas Kontrolle. " +
+          "Versuche deine Hüfte später zu öffnen und den Schläger länger gerade durch den Ball zu führen. " +
+          "Dadurch verbessert sich die Genauigkeit und der Ballflug wird stabiler.";
 
         resultBox.style.display = "block";
-        analyzeBtn.innerText = "Erneut analysieren";
-      }, 1500);
+
+        analyzeBtn.innerText =
+          "🔄 Erneut analysieren";
+
+      },1500);
+
     }
+
   </script>
 
 </body>
