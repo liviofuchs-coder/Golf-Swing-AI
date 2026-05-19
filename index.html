@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Golf AI Coach</title>
 
 <style>
 body{margin:0;background:#081225;color:white;font-family:Arial;text-align:center}
 .container{padding:40px 20px}
-h1{font-size:65px}
+h1{font-size:60px}
 .box{background:#1e293b;padding:35px;border-radius:25px;max-width:950px;margin:25px auto}
 button{border:none;border-radius:14px;padding:18px 35px;font-size:20px;color:white;cursor:pointer;margin-top:15px}
 .uploadBtn{background:#22c55e}
@@ -72,16 +71,18 @@ input{padding:15px;border:none;border-radius:12px;font-size:18px;width:300px}
 
 <br>
 
-<p>Preis: 4.99 FR / Monat</p>
+<p id="priceText">Preis: 4.99 FR / Monat</p>
 
 <button class="premiumBtn" onclick="buyPremium()">
-Premium aktivieren
+Premium kaufen
 </button>
 </div>
 
 </div>
 
 <script>
+const PAYMENT_LINK = "DEIN_STRIPE_LINK_HIER";
+
 const upload = document.getElementById("videoUpload");
 const preview = document.getElementById("videoPreview");
 const result = document.getElementById("resultBox");
@@ -91,6 +92,7 @@ const scoreText = document.getElementById("scoreText");
 const ballFlightText = document.getElementById("ballFlightText");
 const ratingText = document.getElementById("ratingText");
 const tipList = document.getElementById("tipList");
+const priceText = document.getElementById("priceText");
 
 const today = new Date().toDateString();
 
@@ -170,18 +172,6 @@ function analyzeSwing(){
         "Balance im Durchschwung verbessern.",
         "Schläger länger auf Ziellinie führen."
       ]
-    },
-    {
-      score:81,
-      flight:"Ballflug: überwiegend gerade",
-      rating:"Bewertung: Gut",
-      tips:[
-        "Guter Schwung.",
-        "Tempo weiter kontrollieren.",
-        "Finish stabil halten.",
-        "Kopf länger ruhig halten.",
-        "Konstanz weiter trainieren."
-      ]
     }
   ];
 
@@ -210,17 +200,22 @@ function buyPremium(){
     data.premium = true;
     saveData();
     updatePlan();
-
-    alert("👑 Kostenloses Premium aktiviert. Unbegrenzte Analysen freigeschaltet.");
+    alert("👑 Kostenloses Premium aktiviert.");
     return;
   }
 
   if(code === "livio10"){
-    alert("Rabattcode gültig ✅ Preis: 4.49 FR / Monat. Zahlung ist in dieser Demo noch nicht eingebaut.");
+    priceText.innerText = "Rabatt aktiv: 4.49 FR / Monat";
+    alert("Rabattcode gültig ✅ Jetzt müsstest du über Stripe bezahlen.");
     return;
   }
 
-  alert("Ungültiger Code ❌ Premium wurde NICHT aktiviert.");
+  if(PAYMENT_LINK === "DEIN_STRIPE_LINK_HIER"){
+    alert("Echte Zahlung ist noch nicht eingebaut. Du bekommst noch kein Geld. Erstelle zuerst einen Stripe/PayPal/TWINT Zahlungslink.");
+    return;
+  }
+
+  window.location.href = PAYMENT_LINK;
 }
 
 function updatePlan(){
